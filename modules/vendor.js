@@ -3,8 +3,10 @@
 const events = require('../utils/event-pool.js')
 const faker = require('faker')
 
+events.on( 'pickup-start', handlePickup  )
+events.on( 'delivered', handleDelivered  )
 
-const handlePickup = () => {
+function handlePickup(){
   setTimeout(() => {
     let eventObj = {
       event: 'pickup-start',
@@ -21,7 +23,7 @@ const handlePickup = () => {
   },3000)
 }
 
-const handleDelivered = (eventObj) => {
+function handleDelivered(eventObj){
   setTimeout( () => {
     console.log(`VENDOR: Thank you for delivering '${eventObj.payload.orderId}'`)
     eventObj.event = 'delivered'
@@ -29,8 +31,5 @@ const handleDelivered = (eventObj) => {
     console.log('EVENT',eventObj)
   }, 2000)
 }
-
-events.on( 'pickup-start', handlePickup  )
-events.on( 'delivered', handleDelivered  )
 
 module.exports = { handlePickup, handleDelivered }
