@@ -1,31 +1,24 @@
 'use strict'
 
-const events = require("../utils/event-pool");
+const events = require("../utils/event-pool")
 
-events.on('pickup-now', handlePickupNow)
-events.on('in-transit', handleInTransit)
+events.on('ready', handlePickup)
+events.on('pickup', handleInTransit)
 
-function handlePickupNow(eventObj){
-  setTimeout( () => {   
-    eventObj.event = 'pickup'
+function handlePickup(eventObj){
+  setTimeout(()=>{
     eventObj.time = new Date()
-    
-    console.log('EVENT ', eventObj)
+    eventObj.event = 'pickup'
     console.log(`DRIVER: picked up ${eventObj.payload.orderId}`)
-    events.emit('in-transit', eventObj)
-  },4000)
+    events.emit('pickup', eventObj)
+  },0)
 }
 
 function handleInTransit(eventObj){
-  setTimeout( () => {
+  setTimeout(()=>{
     eventObj.event = 'in-transit'
     eventObj.time = new Date()
-    
-    console.log('EVENT ', eventObj)
     console.log(`DRIVER: delivered up ${eventObj.payload.orderId}`)
-    events.emit('delivered', eventObj)
-  },8000)
+    events.emit('in-transit', eventObj)
+  },0)
 }
-
-
-module.exports = { handlePickupNow }
