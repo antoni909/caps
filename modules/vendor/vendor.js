@@ -1,23 +1,23 @@
 'use strict'
 
 const io = require('socket.io-client')
-const socket = io.connect('http://localhost:3000/caps')
+const vendor = io.connect('http://localhost:8000/caps')
 
-const room = '1-800-flowers'
+//enter orders via caps-api
+const company = '1-800-flowers'
 
-socket.on('connect', () =>{
-    socket.emit('room',room)
-})
-socket.on('message', (data) =>{
-    console.log('new message:',data)
+vendor.on('connect', () =>{
+    vendor.emit('join-room',company)
 })
 
-socket.on( 'in-transit', handleDelivered  )
+vendor.on('added', ()=>{
+    console.log('disconnected',vendor.id)
+    vendor.disconnect()
+})
+
+vendor.on( 'delivered', handleDelivered  )
  
 function handleDelivered(eventObj){
-    console.log('client id',socket.id)
+    console.log('vendor: ',eventObj)
     console.log(`VENDOR: Thank you for delivering '${eventObj.payload.orderId}'`)
-    eventObj.event = 'delivered'
-    eventObj.time = new Date()
-    socket.emit('delivered', eventObj)
 }

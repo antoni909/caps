@@ -3,7 +3,7 @@
 const faker = require('faker') 
 
 let eventObj = {
-  event: 'order-ready',
+  event: 'pickup',
   time: new Date(),
   payload: {
     // store: faker.company.companyName(), 
