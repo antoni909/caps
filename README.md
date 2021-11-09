@@ -8,8 +8,11 @@ A real-time service that allows for vendors, such as flower shops or restaurants
 
 ## UML
 
+- Lab 11 Phase I
 ![UML Phase I](EventDrivenPhase1.jpg)
+- Lab 12 Phase II
 ![UML Phase II](phaseII_uml.jpg)
+- Lab 13 Phase III
 ![UML Phase III](phase-III.jpg)
 
 ## Development Process and Milestones
