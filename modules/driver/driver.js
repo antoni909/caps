@@ -1,27 +1,27 @@
 'use strict'
 
 const io = require('socket.io-client')
-const driver = io.connect('http://localhost:3000/caps')
-const room = '1-800-flowers'
+const driver = io.connect('http://localhost:8000/caps')
 
-driver.on('connect', () =>{
-    driver.emit('room',room)
+driver.emit('getall')
+
+driver.on('driver-task', (task) => {
+    console.log('driver task: ',task)
+    driver.emit('recieved',task)
 })
-  
-driver.on('ready', handlePickup)
-driver.on('pickup', handleInTransit)
+driver.on('pickup', handlePickup)
+driver.on('in-transit', handleInTransit)
 
-function handlePickup(eventObj){
-    console.log('client id',driver.id)
-    eventObj.time = new Date()
-    eventObj.event = 'pickup'
-    console.log(`DRIVER: picked up ${eventObj.payload.orderId}`)
-    driver.emit('pickup', eventObj)
+function handlePickup(obj){
+    console.log('obj',obj)
+    obj.eventObj.time = new Date()
+    obj.eventObj.event = 'in-transit'
+    console.log(`DRIVER: picked up ${obj.eventObj.payload.orderId}`)
+    driver.emit('in-transit', obj)
 }
-function handleInTransit(eventObj){
-    console.log('client id',driver.id)
-    eventObj.event = 'in-transit'
-    eventObj.time = new Date()
-    console.log(`DRIVER: delivered up ${eventObj.payload.orderId}`)
-    driver.emit('in-transit', eventObj)
+function handleInTransit(obj){
+    obj.eventObj.event = 'delivered'
+    obj.eventObj.time = new Date()
+    console.log(`DRIVER: delivered up ${obj.eventObj.payload.orderId}`)
+    driver.emit('delivered', obj.eventObj)
 }
